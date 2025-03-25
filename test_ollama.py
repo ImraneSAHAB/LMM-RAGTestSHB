@@ -4,7 +4,7 @@ def test_ollama():
     try:
         while True:
             user_question = input("\nRequête (laisser vide pour quitter) : ")
-            if user_question == "" : return print("Au revoir!")
+            if user_question == "" : return print("\nAu revoir!\n")
             
             conversation.append({'role': 'user', 'content': user_question})
             stream = chat(model='llama3.2', messages=conversation, stream=True)
