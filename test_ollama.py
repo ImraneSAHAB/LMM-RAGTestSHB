@@ -3,8 +3,8 @@ from ollama import chat
 def test_ollama():
     try:
         while True:
-            user_question = input("\Requête (q pour quitter) : ")
-            if user_question.lower() == 'q': return print("Au revoir!")
+            user_question = input("\nRequête (laisser vide pour quitter) : ")
+            if user_question == "" : return print("Au revoir!")
             
             conversation.append({'role': 'user', 'content': user_question})
             stream = chat(model='llama3.2', messages=conversation, stream=True)
@@ -15,6 +15,6 @@ def test_ollama():
 
 if __name__ == "__main__":
     conversation = []
-    prompt = input("Prompt (* pour aucun) : ")
-    if prompt != '*': conversation.append({'role': 'system', 'content': prompt})
+    prompt = input("Prompt (laisser vide pour aucun) : ")
+    if prompt != None: conversation.append({'role': 'system', 'content': prompt})
     test_ollama()
