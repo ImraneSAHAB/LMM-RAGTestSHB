@@ -17,21 +17,11 @@ results = collection.query(
 
 client = ollama.Client()
 
-system_prompt = """
-You are a helpful assistant that can answer questions about the documents.
-
-if you don't know the answer, just say "I don't know".
-
----------
-
-Here is the documents :
-
-
-""" + str(results["documents"][0]) +"""
-"""
+system_prompt = open("system_prompt.txt", "r").read()
+system_prompt += str(results["documents"][0])
 
 response = client.chat(
-    model="llama3.2",
+    model="gemma3",
     messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_querry}],
     stream=True,
 )

@@ -6,7 +6,7 @@ from datetime import datetime
 import shutil
 
 DATA_PATH = "data"
-CHROMA_DB_PATH = "chroma_db"
+CHROMA_DB_PATH = "database/chroma_db"
 
 def detect_title(text):
     # Critères pour détecter un titre
@@ -33,7 +33,6 @@ def add_documents_to_db():
     print("Chargement des documents...")
     loader = PyPDFDirectoryLoader(path=DATA_PATH)
     raw_documents = loader.load()
-    print(f"Nombre de documents chargés : {len(raw_documents)}")
 
     documents = []
     metadatas = []
