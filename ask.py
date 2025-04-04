@@ -2,7 +2,7 @@ import chromadb
 import ollama
 
 DATA_PATH = "data"
-CHROMA_DB_PATH = "chroma_db"
+CHROMA_DB_PATH = "database/chroma_db"
 
 chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
 
