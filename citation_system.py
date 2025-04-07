@@ -134,31 +134,21 @@ class WebSearchSystem:
             # Préparer les informations de source pour l'agent citer
             source_info = []
             for i, result in enumerate(results):
-                if result.get('source_type') != 'aucun' and result.get('source_type') != 'erreur':
+                # Ne garder que les sources web fiables (exclure les résumés générés et les erreurs)
+                if result.get('source_type') == 'web':
                     source_info.append(f"Source {i+1}: {result.get('title')} - {result.get('url')} - {result.get('published_date', 'Date non disponible')}")
             
             # Le gestionnaire de citations ajoute les sources avec le contexte complet
             citations = self.citer.think(
-                f"Citez toutes les sources utilisées dans la réponse précédente. Utilisez le format suivant pour chaque source :\n" +
-                f"Source pour [description de l'information] : [titre de la source] (URL: [url]) (Date: [date])\n\n" +
-                f"IMPORTANT : Assurez-vous que chaque citation correspond exactement à la source qui contient l'information mentionnée. Ne citez pas une source pour une information qu'elle ne contient pas.\n\n" +
+                f"Citez uniquement les sources web fiables utilisées dans la réponse précédente. Utilisez le format suivant pour chaque source :\n" +
+                f"Source pour [description de l'information] : [titre de la source] (URL complète: [url]) (Date: [date])\n\n" +
+                f"IMPORTANT : Assurez-vous que chaque citation correspond exactement à la source qui contient l'information mentionnée. Ne citez pas une source pour une information qu'elle ne contient pas. N'utilisez pas [URL] comme placeholder, affichez l'URL complète.\n\n" +
                 f"Réponse à citer :\n{response}\n\n" +
                 f"Sources disponibles :\n{chr(10).join(source_info)}"
             )
             
-            # Vérifier que toutes les sources sont citées
-            source_count = len([s for s in results if s.get('source_type') not in ['aucun', 'erreur']])
-            citation_lines = [line for line in citations.split('\n') if line.strip() and not line.startswith('Note:')]
-            
-            if len(citation_lines) < source_count:
-                citations += f"\n\nNote : Seules {len(citation_lines)} sources sur {source_count} ont été citées correctement."
-            
-            # Vérification supplémentaire pour s'assurer que les citations sont correctes
-            # Si l'utilisateur signale que les citations sont incorrectes, nous pouvons ajouter une note
-            citations += "\n\nNote : Si vous constatez des erreurs dans les citations, veuillez les signaler."
-            
             # Combiner la réponse et les citations
-            final_response = f"{response}\n\nSources :\n{citations}"
+            final_response = f"{response}\n\nSources fiables :\n{citations}"
             
             return final_response
             
